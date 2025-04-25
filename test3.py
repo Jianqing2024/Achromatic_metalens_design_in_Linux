@@ -1,8 +1,7 @@
 import meep as mp
 import numpy as np
-from time import time
 
-def medium_from_nk(n: float, kappa: float, frequency: float) -> mp.Medium:
+def medium_from_nk(n: float, kappa: float, frequency: float):
     """
     根据复折射率 n + i*kappa 和频率，返回对应的 Meep 材料对象。
 
@@ -23,7 +22,7 @@ def medium_from_nk(n: float, kappa: float, frequency: float) -> mp.Medium:
 
 def mainfunction(radius, index):
     # === 单位设为微米 ===
-    resolution = 50  # 每微米 50 像素，可调
+    resolution = 80  # 每微米 50 像素，可调
 
     # === 材料常数 ===
     nsio2 = 1.4608
@@ -103,7 +102,6 @@ def mainfunction(radius, index):
     print(phase)
     return phase
 
-tic=time()
 radius=np.linspace(0.02,0.18,100)
 
 referencePhase=mainfunction(0,0)
@@ -113,7 +111,3 @@ for i in range(len(radius)):
     
 for i in range(len(p)):
     print(f"{p[i]};\n")
-
-toc=time()
-
-print(f"Time used: {toc-tic} seconds, {len(radius)} simulations")
