@@ -1,10 +1,11 @@
 import meep as mp
 import numpy as np
 import MeepMetalens as mm
+import matplotlib.pyplot as plt
 
 def mainfunction(radius, index):
     # === 单位设为微米 ===
-    resolution = 80  # 每微米 50 像素，可调
+    resolution = 50  # 每微米 50 像素，可调
 
     # === 材料常数 ===
     nsio2 = 1.4608
@@ -18,10 +19,10 @@ def mainfunction(radius, index):
     cylinder_height = np.float64(0.6)
 
     # === 计算区域 ===
-    dpml = 0.5
+    dpml = 1
     zmin=-1.5
     zmax=1.5
-    cell = mp.Vector3(0.4, 0.4, 5)
+    cell = mp.Vector3(0.4, 0.4, 4)
 
     # === 几何结构 ===
     if index==1:
@@ -52,7 +53,7 @@ def mainfunction(radius, index):
     sources = [mp.Source(mp.ContinuousSource(frequency=frequency),
                          component=mp.Ex,
                          center=mp.Vector3(z=source_z),
-                         amplitude=10,
+                         amplitude=1,
                          size=mp.Vector3(substrate_size.x, substrate_size.y))]
 
     sim = mp.Simulation(
@@ -72,15 +73,6 @@ def mainfunction(radius, index):
     # === 点相位监视器 ===
     monitor_point = mp.Vector3(0, 0, 1)
     dft_point = sim.add_dft_fields([mp.Ex], [frequency], where=mp.Volume(center=monitor_point, size=mp.Vector3()))
-    flux_obj = sim.add_flux(
-    frequency,  # 中心频率
-    0,    # 频宽
-    1,     # 频率个数（N=1 表示单频）
-    mp.FluxRegion(
-        center=mp.Vector3(z=1),           # 放在结构之后的某一平面上
-        size=mp.Vector3(x=0.4, y=0.4)  # 横向截面尺寸
-    )
-)
 
     # === 运行仿真 ===
     sim.run(until=100)
@@ -92,7 +84,7 @@ def mainfunction(radius, index):
     print(phase)
     return phase
 
-radius=np.linspace(0.02,0.18,10)
+radius=np.linspace(0.1,0.18,20)
 
 referencePhase=mainfunction(0,0)
 p=np.zeros_like(radius)
@@ -101,3 +93,8 @@ for i in range(len(radius)):
     
 for i in range(len(p)):
     print(f"{p[i]};\n")
+    
+plt.figure(dpi=200)
+plt.plot(radius, p, "bo-")
+plt.tight_layout(pad=0.5)
+plt.savefig("figure.png", dpi=300) 

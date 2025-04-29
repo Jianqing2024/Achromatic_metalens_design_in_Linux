@@ -1,6 +1,8 @@
 import MeepMetalens as mm
 import meep as mp
 import numpy as np
+import sqlite3
+import os
 
 def main(parameter,index):
     p, h, l, w, r=parameter[0], parameter[1], parameter[2], parameter[3], parameter[4]
@@ -50,14 +52,3 @@ def main(parameter,index):
     flux_val = mp.get_fluxes(plane_monitor)
 
     return phase, flux_val
-
-
-mp.verbosity(0)
-
-parameter=[0.4, 0.6, 0.3, 0.11, 0.12]
-
-phasea, a=main(parameter,0)
-phaseb, b=main(parameter,1)
-
-print(f"phase = {phaseb}")
-print(f"Trans = {b[0]/a[0]}")
