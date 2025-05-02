@@ -30,7 +30,6 @@ def main(parameter,index):
                         size=mp.Vector3(p, p)
                         )
                ]
-
     sim = mp.Simulation(cell_size=mp.Vector3(p,p,4),
                         geometry=geometry,
                         sources=sources,
@@ -43,12 +42,20 @@ def main(parameter,index):
                         )
 
     point_monitor, plane_monitor=mm.classicMonitorGroup(sim,p,0.8,wavelength)
-
     sim.run(until=100)
 
     data = sim.get_dft_array(point_monitor, num_freq=0, component=mp.Ex)
     phase = np.angle(data)
-    
     flux_val = mp.get_fluxes(plane_monitor)
 
     return phase, flux_val
+def findDataBase():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    data_dir = os.path.join(parent_dir, "data")
+    db_path = os.path.join(data_dir, "structures.db")
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    return cursor
+
+cursor=findDataBase()

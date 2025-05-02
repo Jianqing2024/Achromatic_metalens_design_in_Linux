@@ -65,7 +65,7 @@ def mainfunction(radius, index):
         default_material=mp.Medium(epsilon=1.0),
         dimensions=3,
         symmetries=[],
-        k_point=mp.Vector3()  # 周期性方向设置为 Gamma 点
+        k_point=mp.Vector3()
     )
 
     # 添加 DFT 点监视器
