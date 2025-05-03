@@ -1,7 +1,7 @@
 import MeepMetalens as mm
 import numpy as np
 from scipy.io import savemat
-
+# 基准数据
 parameter=[0.4, 0.6, 0.3, 0.11, 0.12]
 wav=0.800
 
